@@ -1,0 +1,7 @@
+Input: Initial conditions file of form:
+
+x    y    material    density    ux    uy    material properties...    external forces
+
+Initially "Material" will just be a 0 or 1 for fluid or walls. That should be expanded on in the future to include real-world materials which would use "material properties" to affect the simulation in some way. 
+
+"external forces" would refer to the constant forcing terms driving the system. In Pouseille flow this can be a additive constant applied to all fluid elements. In a thermoacoustic engine this is the constant temperature gradient maintained on the ends of the heat exchangers.
