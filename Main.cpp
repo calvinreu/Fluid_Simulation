@@ -4,10 +4,23 @@
 extern struct Sim_Struct sim_struct;
 extern struct Info_Struct info_struct;
 
+std::chrono::high_resolution_clock::time_point begin,end;
+std::chrono::microseconds duration;
+
 void update(int value) {
+
+  begin = std::chrono::high_resolution_clock::now();
+
   run_sim_timestep();
-  glutPostRedisplay();
-  glutTimerFunc(info_struct.framerate, update, 0);
+
+  if (info_struct.run_graphics) {
+    glutPostRedisplay();
+    glutTimerFunc(info_struct.framerate, update, 0);
+  }
+
+  end = std::chrono::high_resolution_clock::now();
+  duration = std::chrono::duration_cast<std::chrono::microseconds>(end - begin);
+  std::cout << "Runtime: " << duration.count()/1000. << " milliseconds" << std::endl;;
 }
 
 int main(int argc, char const *argv[]) {
@@ -28,7 +41,7 @@ int main(int argc, char const *argv[]) {
 
   if (!info_struct.run_graphics) {
     while (true) {
-      run_sim_timestep();
+      update(0);
     }
   } else {
     // GL initialization
@@ -37,7 +50,7 @@ int main(int argc, char const *argv[]) {
     glutInitDisplayMode(GLUT_SINGLE);
 
     //initial window size and position
-    glutInitWindowSize(128, 512);
+    glutInitWindowSize(512, 512);
     glutInitWindowPosition(1100, 200);
 
     //Window title and declaration of draw function

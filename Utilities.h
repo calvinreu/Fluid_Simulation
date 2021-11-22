@@ -8,6 +8,7 @@
 #include <string.h>
 #include <fstream>
 #include <map>
+#include <chrono>
 #include <GL/freeglut.h>
 
 void render();

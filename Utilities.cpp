@@ -65,7 +65,7 @@ void render() {
   glPointSize(10.0);
   glBegin(GL_POINTS);
 
-  cout << sim_struct.u_max << endl;
+  // cout << sim_struct.u_max << endl;
 
     for (unsigned int x=0; x<sim_struct.grid_size_x; x++) {
       for (unsigned int y=0; y<sim_struct.grid_size_y; y++) {
