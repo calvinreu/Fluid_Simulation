@@ -6,8 +6,8 @@ plt.style.use('dark_background')
 
 # Use this to quickly redefine grid and config variables
 
-grid_size_x = 2
-grid_size_y = 256
+grid_size_x = 64
+grid_size_y = 64
 rho = np.zeros((grid_size_x,grid_size_y))
 u = np.zeros((grid_size_x,grid_size_y))
 v = np.zeros((grid_size_x,grid_size_y))
@@ -20,12 +20,17 @@ for i in range(grid_size_x):
 
 boundary[:,0] = 1
 boundary[:,-1] = 1
-rho[:,:] = 1.
+rho[:,:] = 1
 
-# u[:,32] = -0.01
-# v[:,32] = 0.01
-# rho[128,128] = 2.
-# rho[16,1] = 2.
+u[:,1:-1] = 0.1
+# v[64,2] = 0.01
+# center = 32
+# radius = 6
+# for i in range(grid_size_x):
+#     for j in range(grid_size_y):
+#         if ((center-i)**2.+(center-j)**2.) <= radius**2:
+#             rho[i,j] = 996.
+# rho[32,32] = 2.
 # rho[32+16,1] = 2.
 # centerx = 32
 # centery = 32
@@ -48,13 +53,13 @@ config = {}
 config['grid_size_x'] = grid_size_x
 config['grid_size_y'] = grid_size_y
 config['frame_rate'] = 0
-config['dt'] = 0.1
+config['dt'] = 1e-2
 config['dx'] = 1./grid_size_x
 config['dy'] = 1./grid_size_y
-config['viscosity'] = 1.8e-5
-config['c'] = 347.0
-config['force'] = 1e-4
-config['run_graphics'] = 0
+config['viscosity'] = 1e-2
+config['c'] = 1.0
+config['force'] = 0.0
+config['run_graphics'] = 1
 config["tolerance"] = 1e-5
 
 with open('config.json','w') as fp:

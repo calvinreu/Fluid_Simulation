@@ -5,6 +5,8 @@ struct Info_Struct info_struct;
 
 using namespace std;
 
+double MIN_RENDERABLE_SPEED = 1e-6;
+
 // convert coordinate to opengl system
 inline float convert_x_to_opengl(unsigned int x) {
   return x / (float) sim_struct.grid_size_x;
@@ -18,21 +20,21 @@ void record_speed(size_t x, size_t y) {
 
   sim_struct.speed[s_i(x,y)] = sqrt(pow(sim_struct.u[s_i(x,y)], 2.) + pow(sim_struct.v[s_i(x,y)], 2.));
 
-  if (sim_struct.u[s_i(x,y)] > sim_struct.u_max) {
-    sim_struct.u_max = sim_struct.u[s_i(x,y)];
+  if (sim_struct.speed[s_i(x,y)] > sim_struct.u_max) {
+    sim_struct.u_max = sim_struct.speed[s_i(x,y)];
   }
 
-  if (sim_struct.u[s_i(x,y)] < sim_struct.u_min) {
-    sim_struct.u_min = sim_struct.u[s_i(x,y)];
+  if (sim_struct.speed[s_i(x,y)] < sim_struct.u_min && sim_struct.speed[s_i(x,y)] > MIN_RENDERABLE_SPEED) {
+    sim_struct.u_min = sim_struct.speed[s_i(x,y)];
   }
 
-  if (sim_struct.v[s_i(x,y)] > sim_struct.u_max) {
-    sim_struct.u_max = sim_struct.v[s_i(x,y)];
-  }
-
-  if (sim_struct.v[s_i(x,y)] < sim_struct.u_min) {
-    sim_struct.u_min = sim_struct.v[s_i(x,y)];
-  }
+  // if (sim_struct.v[s_i(x,y)] > sim_struct.u_max) {
+  //   sim_struct.u_max = sim_struct.v[s_i(x,y)];
+  // }
+  //
+  // if (sim_struct.v[s_i(x,y)] < sim_struct.u_min) {
+  //   sim_struct.u_min = sim_struct.v[s_i(x,y)];
+  // }
 
 }
 
@@ -62,14 +64,21 @@ void render() {
 
   glPointSize(10.0);
   glBegin(GL_POINTS);
+
+  cout << sim_struct.u_max << endl;
+
     for (unsigned int x=0; x<sim_struct.grid_size_x; x++) {
       for (unsigned int y=0; y<sim_struct.grid_size_y; y++) {
 
         if (sim_struct.boundary[s_i(x, y)] == 0) {
-          color_val_x = (sim_struct.u[s_i(x, y)] - sim_struct.u_min) / (sim_struct.u_max - sim_struct.u_min);
-          color_val_y = (sim_struct.v[s_i(x, y)] - sim_struct.u_min) / (sim_struct.u_max - sim_struct.u_min);
 
-          glColor4ub(255*color_val_x, 0., 255*color_val_y, 1);
+          if (sim_struct.speed[s_i(x, y)] < MIN_RENDERABLE_SPEED) {
+            color_val_x = 0.;
+          } else {
+            color_val_x = (sim_struct.speed[s_i(x, y)] - sim_struct.u_min) / (sim_struct.u_max - sim_struct.u_min);
+          }
+
+          glColor4ub(255*color_val_x, 0., 255*color_val_x, 1);
           glVertex2f(convert_x_to_opengl(x), convert_y_to_opengl(y));
         }
       }
