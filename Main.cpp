@@ -18,7 +18,7 @@ void update(int value) {
 
   run_sim_timestep();
 
-  if ((TIMESTEP+1) % 100 == 0) {
+  if ((TIMESTEP+1) % 100 == 0 && sim_struct.tolerance != 0.) {
     check_residual();
   }
   TIMESTEP += 1;

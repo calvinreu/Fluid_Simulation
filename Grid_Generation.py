@@ -6,8 +6,8 @@ plt.style.use('dark_background')
 
 # Use this to quickly redefine grid and config variables
 
-grid_size_x = 256
-grid_size_y = 256
+grid_size_x = 512
+grid_size_y = 512
 rho = np.zeros((grid_size_x,grid_size_y))
 u = np.zeros((grid_size_x,grid_size_y))
 v = np.zeros((grid_size_x,grid_size_y))
@@ -25,11 +25,19 @@ rho[:,:] = 1
 # u[:,1:-1] = 0.1
 # v[64,2] = 0.01
 center = 128
-radius = 6
+radius = 16
 for i in range(grid_size_x):
     for j in range(grid_size_y):
         if ((center-i)**2.+(center-j)**2.) <= radius**2:
-            rho[i,j] = 2.
+            rho[i,j] = 1.01
+
+center = 64
+radius = 16
+for i in range(grid_size_x):
+    for j in range(grid_size_y):
+        if ((center-i)**2.+(center-j)**2.) <= radius**2:
+            rho[i,j] = 1.01
+
 # rho[128,128] = 2.
 # rho[32+16,1] = 2.
 # centerx = 32
@@ -52,17 +60,19 @@ output.to_csv('grid_variables.csv',index=False)
 config = {}
 config['grid_size_x'] = grid_size_x
 config['grid_size_y'] = grid_size_y
+config['real_size_x'] = 2
+config['real_size_y'] = 2
 config['frame_rate'] = 0
 config['dt'] = 1e-6
-config['dx'] = 1./grid_size_x
-config['dy'] = 1./grid_size_y
+config['dx'] = 1./grid_size_x*config['real_size_x']
+config['dy'] = 1./grid_size_y*config['real_size_x']
 config['viscosity'] = 1e-2
 config['c'] = 1500.0
 config['force'] = 0.0
 config['run_graphics'] = 1
 config['render_grid_size_x'] = 512
 config['render_grid_size_y'] = 512
-config["tolerance"] = 1e-5
+config["tolerance"] = 0.0
 
 with open('config.json','w') as fp:
     json.dump(config, fp, indent='\t')
