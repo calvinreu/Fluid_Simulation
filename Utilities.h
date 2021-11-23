@@ -75,6 +75,7 @@ struct Sim_Struct {
 struct Info_Struct {
   unsigned int framerate;
   unsigned int run_graphics;
+  int MAX_THREADS;
 };
 
 #endif

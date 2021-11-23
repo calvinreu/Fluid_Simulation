@@ -20,13 +20,12 @@ void update(int value) {
 
   end = std::chrono::high_resolution_clock::now();
   duration = std::chrono::duration_cast<std::chrono::microseconds>(end - begin);
-  std::cout << "Runtime: " << duration.count()/1000. << " milliseconds" << std::endl;;
+  // std::cout << "Runtime: " << duration.count()/1000. << " milliseconds" << std::endl;;
 }
 
 int main(int argc, char const *argv[]) {
 
   read_config();
-
   read_grid_and_init_struct();
 
   printf("Framerate: %d\n", info_struct.framerate);
@@ -36,6 +35,7 @@ int main(int argc, char const *argv[]) {
   printf("Delta y: %lf\n", sim_struct.dy);
   printf("Viscosity: %lf\n", sim_struct.mu);
   printf("Speed of sound: %lf\n", sim_struct.c);
+  printf("%d threads detected\n", info_struct.MAX_THREADS);
 
   printf("Maximum allowed timestep by Courant stability: %lf\n", sim_struct.dx/sim_struct.c);
 

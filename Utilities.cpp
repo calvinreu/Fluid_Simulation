@@ -219,6 +219,7 @@ void read_config() {
   sim_struct.force = stod(config["force"]);
   info_struct.run_graphics = stoi(config["run_graphics"]);
   sim_struct.tolerance = stod(config["tolerance"]);
+  info_struct.MAX_THREADS = omp_get_max_threads();
 
   json_file.close();
 

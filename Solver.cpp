@@ -3,6 +3,7 @@
 #include <float.h>
 
 extern struct Sim_Struct sim_struct;
+extern struct Info_Struct info_struct;
 
 size_t TIMESTEP = 0;
 size_t x;
@@ -36,7 +37,7 @@ void run_sim_timestep() {
   // Calculating E and F stencil quantities
   // backwards differences used here because forward is used in stencil
 
-  #pragma omp parallel for shared(sim_struct) num_threads(8) collapse(2) private(x,y,right,left)
+  #pragma omp parallel for shared(sim_struct) num_threads(info_struct.MAX_THREADS) collapse(2) private(x,y,right,left)
   for (x=0; x<sim_struct.grid_size_x; x++) {
     for (y=0; y<sim_struct.grid_size_y; y++) {
 
@@ -58,7 +59,7 @@ void run_sim_timestep() {
 
 
   // Calculating predictor step and temporary velocities
-  #pragma omp parallel for shared(sim_struct) num_threads(8) collapse(2) private(x,y,right,left)
+  #pragma omp parallel for shared(sim_struct) num_threads(info_struct.MAX_THREADS) collapse(2) private(x,y,right,left)
   for (x=0; x<sim_struct.grid_size_x; x++) {
     for (y=0; y<sim_struct.grid_size_y; y++) {
 
@@ -83,7 +84,7 @@ void run_sim_timestep() {
 
   // Calculating E and F star quantities
   // forward differences here because backward used in stencil
-  #pragma omp parallel for shared(sim_struct) num_threads(8) collapse(2) private(x,y,right,left)
+  #pragma omp parallel for shared(sim_struct) num_threads(info_struct.MAX_THREADS) collapse(2) private(x,y,right,left)
   for (x=0; x<sim_struct.grid_size_x; x++) {
     for (y=0; y<sim_struct.grid_size_y; y++) {
 
@@ -104,7 +105,7 @@ void run_sim_timestep() {
   }
 
   // Final corrector step
-  #pragma omp parallel for shared(sim_struct) num_threads(8) collapse(2) private(x,y,right,left)
+  #pragma omp parallel for shared(sim_struct) num_threads(info_struct.MAX_THREADS) collapse(2) private(x,y,right,left)
   for (x=0; x<sim_struct.grid_size_x; x++) {
     for (y=0; y<sim_struct.grid_size_y; y++) {
 
