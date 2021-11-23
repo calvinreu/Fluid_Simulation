@@ -9,6 +9,7 @@
 #include <fstream>
 #include <map>
 #include <chrono>
+#include <omp.h>
 #include <GL/freeglut.h>
 
 void render();

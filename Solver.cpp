@@ -19,7 +19,7 @@ void check_residual() {
   }
 
   std::cout << "Residual at time " << TIMESTEP << " " << res_sum << std::endl;
-  
+
   if (res_sum < sim_struct.tolerance) {
     save_speed_to_file();
     std::cout << "Convergence found. Exiting.\n";
@@ -35,6 +35,8 @@ void run_sim_timestep() {
 
   // Calculating E and F stencil quantities
   // backwards differences used here because forward is used in stencil
+
+  #pragma omp parallel for shared(sim_struct) num_threads(8) collapse(2) private(x,y,right,left)
   for (x=0; x<sim_struct.grid_size_x; x++) {
     for (y=0; y<sim_struct.grid_size_y; y++) {
 
@@ -54,7 +56,9 @@ void run_sim_timestep() {
     }
   }
 
+
   // Calculating predictor step and temporary velocities
+  #pragma omp parallel for shared(sim_struct) num_threads(8) collapse(2) private(x,y,right,left)
   for (x=0; x<sim_struct.grid_size_x; x++) {
     for (y=0; y<sim_struct.grid_size_y; y++) {
 
@@ -79,6 +83,7 @@ void run_sim_timestep() {
 
   // Calculating E and F star quantities
   // forward differences here because backward used in stencil
+  #pragma omp parallel for shared(sim_struct) num_threads(8) collapse(2) private(x,y,right,left)
   for (x=0; x<sim_struct.grid_size_x; x++) {
     for (y=0; y<sim_struct.grid_size_y; y++) {
 
@@ -99,6 +104,7 @@ void run_sim_timestep() {
   }
 
   // Final corrector step
+  #pragma omp parallel for shared(sim_struct) num_threads(8) collapse(2) private(x,y,right,left)
   for (x=0; x<sim_struct.grid_size_x; x++) {
     for (y=0; y<sim_struct.grid_size_y; y++) {
 
