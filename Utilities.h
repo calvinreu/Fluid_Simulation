@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 #include <math.h>
+#include <float.h>
 #include <iostream>
 #include <stdlib.h>
 #include <string.h>
@@ -17,6 +18,7 @@ void leave_glut(unsigned char key, int xx, int yy);
 void read_grid_and_init_struct();
 void read_config();
 void record_speed(size_t x, size_t y);
+void check_residual();
 void save_speed_to_file();
 inline size_t s_i(size_t x, size_t y);
 

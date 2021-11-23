@@ -4,6 +4,8 @@
 extern struct Sim_Struct sim_struct;
 extern struct Info_Struct info_struct;
 
+extern size_t TIMESTEP;
+
 std::chrono::high_resolution_clock::time_point begin,end;
 std::chrono::microseconds duration;
 
@@ -11,7 +13,15 @@ void update(int value) {
 
   begin = std::chrono::high_resolution_clock::now();
 
+  sim_struct.u_max = -DBL_MAX;
+  sim_struct.u_min = DBL_MAX;
+
   run_sim_timestep();
+
+  if ((TIMESTEP+1) % 100 == 0) {
+    check_residual();
+  }
+  TIMESTEP += 1;
 
   if (info_struct.run_graphics) {
     glutPostRedisplay();
@@ -20,7 +30,7 @@ void update(int value) {
 
   end = std::chrono::high_resolution_clock::now();
   duration = std::chrono::duration_cast<std::chrono::microseconds>(end - begin);
-  // std::cout << "Runtime: " << duration.count()/1000. << " milliseconds" << std::endl;;
+  std::cout << "Runtime: " << duration.count()/1000. << " milliseconds" << std::endl;;
 }
 
 int main(int argc, char const *argv[]) {

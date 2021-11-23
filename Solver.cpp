@@ -1,38 +1,15 @@
 #include "Utilities.h"
 #include "Solver.h"
-#include <float.h>
 
 extern struct Sim_Struct sim_struct;
 extern struct Info_Struct info_struct;
 
-size_t TIMESTEP = 0;
 size_t x;
 size_t y;
 size_t left;
 size_t right;
-double res_sum;
-
-void check_residual() {
-  res_sum = 0.;
-  for (int i=0; i<sim_struct.grid_size_x*sim_struct.grid_size_y; i++) {
-    res_sum += fabs(sim_struct.u[i] - sim_struct.residual[i]);
-    sim_struct.residual[i] = sim_struct.u[i];
-  }
-
-  std::cout << "Residual at time " << TIMESTEP << " " << res_sum << std::endl;
-
-  if (res_sum < sim_struct.tolerance) {
-    save_speed_to_file();
-    std::cout << "Convergence found. Exiting.\n";
-    exit(0);
-  }
-
-}
 
 void run_sim_timestep() {
-
-  sim_struct.u_max = -DBL_MAX;
-  sim_struct.u_min = DBL_MAX;
 
   // Calculating E and F stencil quantities
   // backwards differences used here because forward is used in stencil
@@ -132,15 +109,8 @@ void run_sim_timestep() {
       sim_struct.u[s_i(x,y)] = sim_struct.rho_u[s_i(x,y)] / sim_struct.rho[s_i(x,y)];
       sim_struct.v[s_i(x,y)] = sim_struct.rho_v[s_i(x,y)] / sim_struct.rho[s_i(x,y)];
 
-      record_speed(x,y);
+      record_speed(x,y); // Needed for rendering
 
     }
   }
-
-  if ((TIMESTEP+1) % 100 == 0) {
-    check_residual();
-
-  }
-
-  TIMESTEP += 1;
 }

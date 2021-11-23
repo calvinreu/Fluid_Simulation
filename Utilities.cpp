@@ -3,6 +3,8 @@
 struct Sim_Struct sim_struct;
 struct Info_Struct info_struct;
 
+size_t TIMESTEP = 0;
+
 using namespace std;
 
 double MIN_RENDERABLE_SPEED = 1e-6;
@@ -27,15 +29,22 @@ void record_speed(size_t x, size_t y) {
   if (sim_struct.speed[s_i(x,y)] < sim_struct.u_min && sim_struct.speed[s_i(x,y)] > MIN_RENDERABLE_SPEED) {
     sim_struct.u_min = sim_struct.speed[s_i(x,y)];
   }
+}
 
-  // if (sim_struct.v[s_i(x,y)] > sim_struct.u_max) {
-  //   sim_struct.u_max = sim_struct.v[s_i(x,y)];
-  // }
-  //
-  // if (sim_struct.v[s_i(x,y)] < sim_struct.u_min) {
-  //   sim_struct.u_min = sim_struct.v[s_i(x,y)];
-  // }
+void check_residual() {
+  double res_sum = 0.;
+  for (int i=0; i<sim_struct.grid_size_x*sim_struct.grid_size_y; i++) {
+    res_sum += fabs(sim_struct.speed[i] - sim_struct.residual[i]);
+    sim_struct.residual[i] = sim_struct.speed[i];
+  }
 
+  std::cout << "Residual at time " << TIMESTEP << " " << res_sum << std::endl;
+
+  if (res_sum < sim_struct.tolerance) {
+    save_speed_to_file();
+    std::cout << "Convergence found. Exiting.\n";
+    exit(0);
+  }
 }
 
 void save_speed_to_file() {
