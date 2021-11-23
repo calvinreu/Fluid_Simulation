@@ -71,7 +71,6 @@ void render() {
   double color_val_x;
   double color_val_y;
 
-  glPointSize(10.0);
   glBegin(GL_POINTS);
 
   // cout << sim_struct.u_max << endl;
@@ -229,6 +228,9 @@ void read_config() {
   info_struct.run_graphics = stoi(config["run_graphics"]);
   sim_struct.tolerance = stod(config["tolerance"]);
   info_struct.MAX_THREADS = omp_get_max_threads();
+  info_struct.render_grid_size_x = stoi(config["render_grid_size_x"]);
+  info_struct.render_grid_size_y = stoi(config["render_grid_size_y"]);
+
 
   json_file.close();
 

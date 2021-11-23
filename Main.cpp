@@ -30,7 +30,7 @@ void update(int value) {
 
   end = std::chrono::high_resolution_clock::now();
   duration = std::chrono::duration_cast<std::chrono::microseconds>(end - begin);
-  std::cout << "Runtime: " << duration.count()/1000. << " milliseconds" << std::endl;;
+  // std::cout << "Runtime: " << duration.count()/1000. << " milliseconds" << std::endl;;
 }
 
 int main(int argc, char const *argv[]) {
@@ -60,7 +60,7 @@ int main(int argc, char const *argv[]) {
     glutInitDisplayMode(GLUT_SINGLE);
 
     //initial window size and position
-    glutInitWindowSize(512, 512);
+    glutInitWindowSize(info_struct.render_grid_size_x, info_struct.render_grid_size_y);
     glutInitWindowPosition(1100, 200);
 
     //Window title and declaration of draw function
@@ -69,6 +69,17 @@ int main(int argc, char const *argv[]) {
     glutTimerFunc(info_struct.framerate, update, 0);
     glutKeyboardFunc(leave_glut);
     glOrtho(0.0, 1.0, 0.0, 1.0, -1.0, 1.0);
+
+    float p_size_x = (float)glutGet(GLUT_WINDOW_WIDTH) / (float)sim_struct.grid_size_x ;
+    float p_size_y = (float)glutGet(GLUT_WINDOW_HEIGHT) / (float)sim_struct.grid_size_y ;
+    if (p_size_x > p_size_y) {
+      std::cout << "Points size: " << p_size_x << std::endl;
+      glPointSize(p_size_x);
+    } else {
+      std::cout << "Points size: " << p_size_y  << std::endl;
+      glPointSize(p_size_y);
+    }
+
 
     //returns you back to main() after simlation is over
     glutSetOption(GLUT_ACTION_ON_WINDOW_CLOSE, GLUT_ACTION_GLUTMAINLOOP_RETURNS);

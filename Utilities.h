@@ -78,6 +78,8 @@ struct Info_Struct {
   unsigned int framerate;
   unsigned int run_graphics;
   int MAX_THREADS;
+  unsigned int render_grid_size_x;
+  unsigned int render_grid_size_y;
 };
 
 #endif

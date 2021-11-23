@@ -53,13 +53,15 @@ config = {}
 config['grid_size_x'] = grid_size_x
 config['grid_size_y'] = grid_size_y
 config['frame_rate'] = 0
-config['dt'] = 1e-4
+config['dt'] = 1e-6
 config['dx'] = 1./grid_size_x
 config['dy'] = 1./grid_size_y
 config['viscosity'] = 1e-2
-config['c'] = 1.0
+config['c'] = 1500.0
 config['force'] = 0.0
 config['run_graphics'] = 1
+config['render_grid_size_x'] = 512
+config['render_grid_size_y'] = 512
 config["tolerance"] = 1e-5
 
 with open('config.json','w') as fp:
